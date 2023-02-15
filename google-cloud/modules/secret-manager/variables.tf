@@ -11,10 +11,10 @@ variable "replication" {
   default = true
 }
 
-variable "secret_data" {
-  type = string
-}
+# variable "secret_data" {
+#   type = set(string)
+# }
 
-variable "secret_data2" {
-  type = string
+variable "secret_data" {
+  type = map
 }
