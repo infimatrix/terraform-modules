@@ -1,3 +1,8 @@
+variable "project_id" {
+  description = "Name of the project to be used "
+  type        = string
+}
+
 variable "cluster_name" {
   type        = string
   description = "The name of the cluster (required)"
@@ -8,15 +13,24 @@ variable "cluster_region" {
   default = "us-central1-c"
 }
 
-# variable "ip_range_pods" {
-#   type        = string
-#   description = "The _name_ of the secondary subnet ip range to use for pods"
-# }
+variable "network" {
+  description = "name of the network to be used "
+  type        = string
+}
+variable "subnetwork" {
+  description = "Name of the subnetwork to be used"
+  type        = string
+}
 
-# variable "ip_range_services" {
-#   type        = string
-#   description = "The _name_ of the secondary subnet range to use for services"
-# }
+variable "cluster_secondary_range_name" {
+  type        = string
+  description = "The _name_ of the secondary subnet ip range to use for pods"
+}
+
+variable "services_secondary_range_name" {
+  type        = string
+  description = "The _name_ of the secondary subnet range to use for services"
+}
 
 variable "initial_node_count" {
   type        = number
@@ -49,61 +63,4 @@ variable "enable_private_endpoint" {
 variable "master_ipv4_cidr_block" {
   type        = string
   description = "The IP range in CIDR notation to use for the hosted master network. This range will be used for assigning private IP addresses to the cluster master(s) and the ILB VIP"
-}
-
-variable "authorized_cidr_blocks" {
-  type        = string
-  description = "The authorized cidr block to connect to private cluster"
-}
-
-variable "display_names" {
-  type        = string
-  description = "The display name for cidr_blocks users"
-}
-
-variable "enable_autoscaling" {
-  default = false
-}
-
-variable "node_count" {
-  default = "1"
-}
-
-variable "min_node_count" {
-  default = "1"
-}
-variable "max_node_count" {
-  default = "3"
-}
-
-variable "image_type" {
-  default = "COS"
-}
-
-variable "machine_type" {
-  default = "n1-standard-1"
-}
-variable "local_ssd_count" {
-  default = "0"
-}
-
-variable "disk_size_gb" {
-  default = "100"
-}
-
-variable "disk_type" {
-  default = "pd-standard"
-}
-# variable "service_account" {
-#   type = string
-# }
-
-variable "preemptible" {
-  default = "false"
-}
-
-variable "node_labels" {
-  type        = map(string)
-  description = "The GCE resource labels (a map of key/value pairs) to be applied to the node"
-  default     = {}
 }

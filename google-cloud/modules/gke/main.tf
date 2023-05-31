@@ -2,13 +2,21 @@ locals {
   enable_autoscaling = var.enable_autoscaling ? [true] : []
 }
 
+resource "google_project_service" "compute" {
+  service = "compute.googleapis.com"
+}
+
+resource "google_project_service" "container" {
+  service = "container.googleapis.com"
+}
+
 resource "google_container_cluster" "primary" {
   project  = var.project_id
   name     = var.cluster_name
-  location = var.location
+  location = var.cluster_region
 
-  network         = var.network
-  subnetwork      = var.subnetwork
+  network         = google_compute_network.vpc_network.name
+  subnetwork      = google_compute_subnetwork.subnet.name
   resource_labels = var.cluster_resource_labels
 
   # We can't create a cluster with no node pool defined, but we want to only use
@@ -19,8 +27,8 @@ resource "google_container_cluster" "primary" {
   remove_default_node_pool = var.remove_default_node_pool
 
   ip_allocation_policy {
-    cluster_secondary_range_name  = var.ip_range_pods
-    services_secondary_range_name = var.ip_range_services
+    cluster_secondary_range_name  = google_compute_subnetwork.subnet.secondary_ip_range[0].range_name
+    services_secondary_range_name = google_compute_subnetwork.subnet.secondary_ip_range[1].range_name
   }
   master_authorized_networks_config {
     cidr_blocks {
@@ -28,6 +36,9 @@ resource "google_container_cluster" "primary" {
       display_name = var.display_names
     }
   }
+  workload_identity_config {
+  //workload_pool = "${data.google_project.project.project_id}.svc.id.goog"
+}
 
   # master_authorized_networks_config {
   #   for_each = toset(var.authorized_cidr_blocks)
@@ -45,7 +56,7 @@ resource "google_container_cluster" "primary" {
 
 resource "google_container_node_pool" "primary_nodes" {
   name       = google_container_cluster.primary.name
-  location   = var.location
+  location   = google_container_cluster.primary.location
   cluster    = google_container_cluster.primary.name
   node_count = var.enable_autoscaling ? null : var.node_count
 
@@ -65,7 +76,7 @@ resource "google_container_node_pool" "primary_nodes" {
     disk_type       = var.disk_type
     local_ssd_count = var.local_ssd_count
     preemptible     = var.preemptible
-    service_account = var.service_account
+    //service_account = var.service_account
     oauth_scopes = [
       "https://www.googleapis.com/auth/logging.write",
       "https://www.googleapis.com/auth/monitoring",
