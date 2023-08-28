@@ -1,0 +1,80 @@
+project_id = "gcp-test-377205"
+region     = "asia-south1"
+
+
+// Values for GCP VPC //
+network_name                    = "gcp-migration-vpc"
+description                     = "VPC For aws-gcp-migration"
+auto_create_subnetworks         = false
+delete_default_routes_on_create = false
+routing_mode                    = "REGIONAL"
+
+// Values for GCP Subnet //
+
+subnet_name                = "vpn-subnet"
+subnet_description         = "used for GCP VPN"
+ip_cidr_range              = "172.16.0.0/16"
+stack_type                 = "IPV4_ONLY"
+purpose                    = "PRIVATE"
+private_ip_google_access   = true
+private_ipv6_google_access = "DISABLE_GOOGLE_ACCESS"
+
+
+# // Values for Compute IP address //
+# compute_IP_name = "gcp-vpn-ip"
+# address_type    = "EXTERNAL"
+# network_tier    = "STANDARD"
+
+
+# //  Values for Virtual Private Network and Tunnels //
+# vpn_gateway_name = "vpn-1"
+# tunnel1_name     = "vpn-1-tunnel-1"
+# ike_version      = 2
+# tunnel2_name     = "vpn-1-tunnel-2"
+
+
+
+// Values for AWS VPC //
+vpc_cidr_block       = "10.20.0.0/16"
+instance_tenancy     = "default"
+enable_dns_hostnames = true
+vpc_tags = {
+  Name = "aws-migrate-vpc"
+}
+
+// Values For AWS Subnet  //
+subnet_cidr_block = "10.20.0.0/24"
+availability_zone = "ap-south-1a"
+subnet_tags = {
+  Name = "public-subnet"
+}
+subnet2_cidr_block = "10.20.1.0/24"
+availability_zone2 = "ap-south-1b"
+subnet2_tags = {
+  Name = "server-subnet"
+}
+
+
+internet_gateway_tags = {
+  Name = "aws-vpc-igw"
+}
+
+bgp_asn      = 65000
+gateway_type = "ipsec.1"
+customer_gateway_tags = {
+  Name = "aws-customer-gateway"
+}
+
+virtual_private_gateway_tags = {
+  Name = "aws-vpg"
+}
+
+aws_vpn_connection_type = "ipsec.1"
+aws_vpn_connection_tags = {
+  Name = "aws-gcp-vpn-connection"
+}
+static_routes_only = true
+
+aws_route_table_tags = {
+  Name = "aws-route-table"
+}
