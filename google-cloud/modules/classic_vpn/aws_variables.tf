@@ -1,12 +1,11 @@
 variable "access_key" {
   type    = string
-  default = "AKIAYHNAJUPOHMWO7TV4"
+  
 
 }
 
 variable "secret_key" {
   type    = string
-  default = "RnshGr2TnnwTcpUeC6f6myuwxSgv5IJonLSxldHU"
 }
 
 // Variables for AWS VPC //
